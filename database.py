@@ -29,6 +29,6 @@ def get_conection():
             )
             return conn
     except Exception as ex:
-        print(f'Erro ao conectar ao banco de babos: {ex}')
+        print(f'Erro ao conectar ao banco de dadsos: {ex}')
         return None
 

@@ -3,7 +3,7 @@ import uuid
 import json
 from flask import Flask, request, jsonify, render_template, redirect, url_for
 from psycopg2.extras import RealDictCursor
-from database import get_connection
+from database import get_conection
 
 app = Flask(__name__)
 
@@ -32,7 +32,7 @@ def home():
 # Ping
 @app.route('/ping', methods=['GET'])
 def ping():
-    conn = get_connection()
+    conn = get_conection()
     conn.close()
     return jsonify({"message": "pong! API Rodando!", "db": str(conn)}), 200
 
@@ -42,7 +42,7 @@ def ping():
 def listar_filmes():
     sql = "SELECT * FROM filmes"
     try:
-        conn = get_connection()
+        conn = get_conection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute(sql)
         filmes = cursor.fetchall()
@@ -80,7 +80,7 @@ def novo_filme():
             sql = "INSERT INTO filmes (titulo, genero, ano, url_capa) VALUES (%s, %s, %s, %s)"
             params = [titulo, genero, ano, nome_hash]
 
-            conn = get_connection()
+            conn = get_conection()
             cursor = conn.cursor()
             cursor.execute(sql, params)
             conn.commit()
@@ -97,7 +97,7 @@ def novo_filme():
 @app.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar_filme(id):
     try:
-        conn = get_connection()
+        conn = get_conection()
         if request.method == "POST":
             titulo = request.form["titulo"]
             genero = request.form["genero"]
@@ -143,7 +143,7 @@ def editar_filme(id):
 @app.route("/deletar/<int:id>", methods=["POST"])
 def deletar_filme(id):
     try:
-        conn = get_connection()
+        conn = get_conection()
         cursor = conn.cursor()
         sql = "DELETE FROM filmes WHERE id = %s"
         params = [id]
